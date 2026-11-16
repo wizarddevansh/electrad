@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { KpiStrip } from "@/components/dashboard/KpiStrip";
 import { TimeSeriesChart } from "@/components/dashboard/TimeSeriesChart";
@@ -8,7 +9,7 @@ import { MachineFeederCard, type FeederData } from "@/components/dashboard/Machi
 import { CompressorLeakCard } from "@/components/dashboard/CompressorLeakCard";
 import { FloorConfirmLoop, type AlertItem } from "@/components/dashboard/FloorConfirmLoop";
 import { Footer } from "@/components/Footer";
-import { Sparkles, CheckCircle2 } from "lucide-react";
+import { Info, CheckCircle2 } from "lucide-react";
 
 const INITIAL_FEEDERS: FeederData[] = [
   {
@@ -24,12 +25,12 @@ const INITIAL_FEEDERS: FeederData[] = [
     voltage: 415,
     powerFactor: 0.94,
     status: "leak_pattern",
-    statusNote: "Compressor cycling every 52s during unstaffed breaks. BEE on-load/off-load ratio indicates 26.9% line leak.",
+    statusNote: "Compressor cycling every 52s during unstaffed breaks. BEE on/off-load ratio indicates 26.9% line leak.",
   },
   {
     id: "feeder-2",
     name: "Hydraulic Press & CNC Line #3",
-    category: "Metal Forming / Machining",
+    category: "Machining Line",
     ratedKw: 45,
     currentKw: 19.8,
     baselineKw: 2.1,
@@ -39,7 +40,7 @@ const INITIAL_FEEDERS: FeederData[] = [
     voltage: 415,
     powerFactor: 0.88,
     status: "idle_flagged",
-    statusNote: "Continuous 8.4 kW idle floor for 48 minutes with zero workpiece cycles recorded. Floor confirmation requested.",
+    statusNote: "Continuous 8.4 kW idle floor for 48 minutes with zero workpiece cycles recorded. Confirmation requested.",
   },
   {
     id: "feeder-3",
@@ -54,7 +55,7 @@ const INITIAL_FEEDERS: FeederData[] = [
     voltage: 415,
     powerFactor: 0.91,
     status: "normal",
-    statusNote: "Steady thermal dissipation load within expected seasonal envelope.",
+    statusNote: "Steady thermal dissipation load within expected operating envelope.",
   },
 ];
 
@@ -68,8 +69,8 @@ const INITIAL_ALERTS: AlertItem[] = [
     detectedAt: "48 minutes ago",
     excessKw: 8.4,
     durationMinutes: 48,
-    potentialWasteRupees: 57.12, // 8.4 kW * 0.8 hr * ₹8.5/kWh
-    potentialCo2Kg: 4.77, // (8.4 * 0.8) * 0.710
+    potentialWasteRupees: 57.12,
+    potentialCo2Kg: 4.77,
     status: "pending",
   },
   {
@@ -81,7 +82,7 @@ const INITIAL_ALERTS: AlertItem[] = [
     detectedAt: "18 minutes ago",
     excessKw: 14.8,
     durationMinutes: 60,
-    potentialWasteRupees: 125.80, // 14.8 kWh * ₹8.5
+    potentialWasteRupees: 125.80,
     potentialCo2Kg: 10.5,
     status: "pending",
   },
@@ -91,13 +92,12 @@ export default function DashboardPage() {
   const [feeders, setFeeders] = useState<FeederData[]>(INITIAL_FEEDERS);
   const [alerts, setAlerts] = useState<AlertItem[]>(INITIAL_ALERTS);
 
-  // Live Ledger state
   const [verifiedMonthlySavingsRupees, setVerifiedMonthlySavingsRupees] = useState<number>(124650);
   const [verifiedCo2Kg, setVerifiedCo2Kg] = useState<number>(9820);
   const [isPulsingSavings, setIsPulsingSavings] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Simulated live edge telemetry tick (subtle oscillation in readings)
+  // Simulated live edge telemetry tick
   useEffect(() => {
     const interval = setInterval(() => {
       setFeeders((prev) =>
@@ -133,13 +133,11 @@ export default function DashboardPage() {
       prev.map((a) => (a.id === alert.id ? { ...a, status: "confirmed_waste" } : a))
     );
 
-    // Update verified ledger
     setVerifiedMonthlySavingsRupees((prev) => prev + alert.potentialWasteRupees);
     setVerifiedCo2Kg((prev) => Number((prev + alert.potentialCo2Kg).toFixed(1)));
 
-    // Trigger visual pulse & toast notification
     setIsPulsingSavings(true);
-    setToastMessage(`✓ Confirmed waste on ${alert.feederName}: +₹${alert.potentialWasteRupees.toFixed(2)} added to verified audit ledger!`);
+    setToastMessage(`✓ Confirmed waste on ${alert.feederName}: +₹${alert.potentialWasteRupees.toFixed(2)} added to verified audit ledger.`);
 
     setTimeout(() => {
       setIsPulsingSavings(false);
@@ -165,18 +163,18 @@ export default function DashboardPage() {
     setAlerts(INITIAL_ALERTS);
     setVerifiedMonthlySavingsRupees(124650);
     setVerifiedCo2Kg(9820);
-    setToastMessage("Demo simulation restored to baseline state.");
+    setToastMessage("Telemetry simulation restored to baseline state.");
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1410] text-[#F8FAFC]">
-      {/* Toast Notification Banner */}
+    <div className="min-h-screen bg-[#0A110E] text-[#F4F7F5] flex flex-col">
+      {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-[#22C55E] bg-[#122019] px-4 py-3 text-xs font-semibold text-[#4ADE80] shadow-[0_0_25px_rgba(34,197,94,0.4)] backdrop-blur animate-in fade-in slide-in-from-bottom-5">
-          <Sparkles className="h-4 w-4 text-[#22C55E]" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border border-[#10B981] bg-[#101B16] px-4 py-2.5 text-xs font-medium text-[#10B981] shadow-xl backdrop-blur">
+          <CheckCircle2 className="h-4 w-4 text-[#10B981]" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -184,9 +182,20 @@ export default function DashboardPage() {
       {/* Top Header */}
       <DashboardHeader onResetDemo={handleResetDemo} />
 
+      {/* Persistent Top Illustrative Simulation Banner */}
+      <div className="border-b border-[#1C2E25] bg-[#101B16] py-2 px-4 sm:px-6 lg:px-8 text-center">
+        <p className="text-[11px] text-[#94A39B]">
+          <strong className="text-[#F4F7F5]">Illustrative Simulation:</strong> All telemetry, feeder loads, and savings on this dashboard are simulated for educational and concept-demonstration purposes.{" "}
+          <Link href="/disclaimer" className="text-[#10B981] underline hover:text-[#059669]">
+            Read full disclaimer
+          </Link>
+          .
+        </p>
+      </div>
+
       {/* Main Dashboard Body */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-        {/* KPI Summary Strip */}
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8 flex-1">
+        {/* KPI Strip */}
         <KpiStrip
           currentKw={totalCurrentKw}
           flaggedWasteKwh={flaggedWasteKwh}
@@ -196,7 +205,7 @@ export default function DashboardPage() {
           isPulsingSavings={isPulsingSavings}
         />
 
-        {/* 1-Tap Floor Confirm Loop (Interactive human-in-the-loop) */}
+        {/* 1-Tap Floor Confirm Loop */}
         <FloorConfirmLoop
           alerts={alerts}
           onConfirmWaste={handleConfirmWaste}
@@ -207,14 +216,14 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-lg font-bold text-[#F8FAFC]">
-                Monitored Industrial Feeder Nodes
+              <h2 className="text-sm font-semibold text-[#F4F7F5]">
+                Simulated Feeder Nodes (CT Telemetry)
               </h2>
-              <p className="text-xs text-[#94A3B8]">
-                Real-time 3-phase split-core current transformer sampling (Phase R, Y, B)
+              <p className="text-xs text-[#94A39B]">
+                True RMS current sampling across 3-phase incoming circuit branches (Phase R, Y, B)
               </p>
             </div>
-            <span className="text-xs font-mono text-[#4ADE80]">
+            <span className="text-xs font-mono text-[#10B981]">
               3 Nodes Online (100% Signal)
             </span>
           </div>

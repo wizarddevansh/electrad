@@ -9,186 +9,223 @@ import {
   CheckSquare,
   FileSpreadsheet,
   ArrowRight,
-  ShieldAlert,
-  Sparkles,
+  Gauge,
+  Signal,
+  FileCheck,
+  Activity,
   Layers,
+  Sparkles,
+  ShieldAlert,
 } from "lucide-react";
 
 export function ArchitectureFlow() {
   const [activeTab, setActiveTab] = useState<"poc" | "phase2">("poc");
 
-  const steps = [
+  const pocCards = [
     {
-      num: "01",
-      title: "Split-Core CT Clamps",
+      step: "01",
+      title: "Clip-On CT Clamp",
       subtitle: "Non-Invasive Sensing",
-      icon: Radio,
-      pocDetail: "100A–600A split-core current transformers clip over existing incoming busbars or motor cable runs. Zero plant shutdown or busbar cutting.",
-      phase2Detail: "High-accuracy Rogowski coils for tight switchgear enclosures and multi-feeder branch cabinets up to 3200A.",
+      desc: "Split-core current transformer clips over machine feeder cables. Fast clamp-on installation with zero cable cutting, zero busbar alteration, and zero plant downtime.",
       tag: "Edge Physical",
+      icon: Radio,
     },
     {
-      num: "02",
+      step: "02",
       title: "ESP32 Edge Node",
-      subtitle: "High-Rate ADC Sampling",
-      icon: Cpu,
-      pocDetail: "Dual-core ESP32 sampling at 2 kHz to calculate true RMS current (I_rms) and apparent load, filtering electrical noise locally.",
-      phase2Detail: "Edge ML anomaly inference on microcontroller, 3-phase true power factor cos(φ), and THD harmonic distortion metrics.",
+      subtitle: "RMS Current Sampling",
+      desc: "Dual-core microcontroller sampling at high rate to calculate true RMS current (I_rms), applying configured nominal voltage and active noise filtration on-chip.",
       tag: "Edge Compute",
+      icon: Cpu,
     },
     {
-      num: "03",
-      title: "Wi-Fi / GSM Mesh",
-      subtitle: "Fail-Safe Industrial Comms",
-      icon: Wifi,
-      pocDetail: "Factory Wi-Fi with local flash buffering (retains up to 72 hours of telemetry during broadband outages) over lightweight MQTT.",
-      phase2Detail: "Industrial LoRaWAN long-range mesh covering 2 km factory floor spans + 4G/5G multi-carrier eSIM fallback.",
+      step: "03",
+      title: "Wi-Fi Telemetry",
+      subtitle: "1-Minute Data Packets",
+      desc: "Streams lightweight MQTT telemetry packets (kW draw, cumulative kWh, timestamp) to the cloud dashboard with local flash buffering during connection drops.",
       tag: "Telemetry Bus",
+      icon: Wifi,
     },
     {
-      num: "04",
+      step: "04",
       title: "Statistical Baseline Engine",
       subtitle: "Idle & BEE Leak Algorithms",
+      desc: "Learns the rolling median off-shift idle floor for each feeder line and isolates non-operational break windows to calculate BEE on-load vs. off-load leak ratios.",
+      tag: "Core Engine",
       icon: BarChart3,
-      pocDetail: "Calculates rolling 7-day median idle floor per machine. Compares compressor on-load vs. off-load duty cycles against BEE standards.",
-      phase2Detail: "Multi-parameter shift schedule matching, seasonal thermal corrections, and automated predictive maintenance alerts.",
-      tag: "Core Intelligence",
     },
     {
-      num: "05",
-      title: "1-Tap Floor Confirm",
-      subtitle: "Human-in-the-Loop Loop",
+      step: "05",
+      title: "1-Tap Floor Confirm Loop",
+      subtitle: "Human-in-the-Loop Validation",
+      desc: "Enables floor supervisors to classify flagged anomalies as planned overtime vs. confirmed idle waste with 1 tap, eliminating noisy false positives.",
+      tag: "Verification",
       icon: CheckSquare,
-      pocDetail: "Instant push to plant manager / supervisor: 'Planned Production' vs 'Confirm Idle Waste'. Zero noisy false positives.",
-      phase2Detail: "Automated WhatsApp Bot with voice notes and automated Modbus relays to trip auxiliary idling cooling towers.",
-      tag: "Decision Loop",
     },
     {
-      num: "06",
-      title: "Verified Audit Ledger",
+      step: "06",
+      title: "Verified Savings Ledger",
       subtitle: "Rupees & CEA Carbon Proof",
+      desc: "Audits confirmed waste reductions in real time, calculating avoided kWh, rupee savings adjusted for state DISCOM tariffs, and CEA-certified CO₂ avoidance (0.710 kg/kWh).",
+      tag: "Audit Ledger",
       icon: FileSpreadsheet,
-      pocDetail: "Real-time ledger recording confirmed wasted kWh, discom rupee loss stopped, and official CEA 0.710 kg CO₂ avoided.",
-      phase2Detail: "BEE ADEETIE audit-ready PDF compliance reports and tokenized carbon credit verification exports.",
-      tag: "Outcome Proof",
     },
   ];
 
+  const phase2Cards = [
+    {
+      step: "01",
+      title: "Multi-Feeder 3-Phase Sensing",
+      subtitle: "Full Voltage & THD Vector",
+      desc: "Direct 3-phase line-to-line voltage monitoring, true real-time power factor cos(φ), and total harmonic distortion (THD) tracking across up to 32 feeders per panel.",
+      tag: "Phase 2 Hardware",
+      icon: Gauge,
+    },
+    {
+      step: "02",
+      title: "Industrial GSM / 4G Failover",
+      subtitle: "Dual Cellular + Flash Buffer",
+      desc: "Cellular multi-carrier eSIM fallback ensuring uninterrupted edge telemetry even when plant-wide industrial Wi-Fi or broadband networks experience outages.",
+      tag: "Phase 2 Network",
+      icon: Signal,
+    },
+    {
+      step: "03",
+      title: "Automated BEE ADEETIE M&V",
+      subtitle: "Audit-Ready Compliance Export",
+      desc: "One-click generation of Bureau of Energy Efficiency standard Measurement & Verification (M&V) reports demonstrating verified ≥10% cluster savings.",
+      tag: "Phase 2 Compliance",
+      icon: FileCheck,
+    },
+    {
+      step: "04",
+      title: "Predictive Motor & Bearing Drift",
+      subtitle: "High-Resolution Signature Analysis",
+      desc: "Current signature analysis (MCSA) flags rotor imbalance, stator degradation, and bearing mechanical wear weeks before catastrophic motor burnout.",
+      tag: "Phase 2 Diagnostics",
+      icon: Activity,
+    },
+    {
+      step: "05",
+      title: "Multi-Plant Cluster Benchmarking",
+      subtitle: "Specific Energy Consumption (SEC)",
+      desc: "Compares specific energy consumption (SEC in kWh/tonne) across production lines, sibling plants, and regional cluster benchmarks.",
+      tag: "Phase 2 Enterprise",
+      icon: Layers,
+    },
+    {
+      step: "06",
+      title: "Carbon Credit (CCTS) Export",
+      subtitle: "Scope 2 Decarbonization Registry",
+      desc: "Cryptographically verified emission reduction ledgers ready for submission under India's Carbon Credit Trading Scheme (CCTS) and CEA baseline factors.",
+      tag: "Phase 2 Carbon Ledger",
+      icon: Sparkles,
+    },
+  ];
+
+  const activeCards = activeTab === "poc" ? pocCards : phase2Cards;
+
   return (
-    <section id="architecture" className="relative bg-[#0B1410] py-20 border-b border-[#1E3529]">
+    <section id="how-it-works" className="relative bg-[#0A110E] py-20 border-b border-[#1C2E25]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#4ADE80]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
-              End-to-End Pipeline
-            </div>
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[#F8FAFC] sm:text-4xl">
-              6-Step Industrial Waste Detection Architecture
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#10B981]">
+              Architecture & Data Flow
+            </span>
+            <h2 className="mt-1.5 text-3xl font-extrabold tracking-tight text-[#F4F7F5] sm:text-4xl">
+              6-Step Energy Intelligence Pipeline
             </h2>
-            <p className="mt-3 max-w-2xl text-sm text-[#94A3B8]">
-              From non-invasive clamp telemetry to verified financial and carbon audit reports — engineered specifically for Indian MSME switchboards.
+            <p className="mt-2.5 max-w-2xl text-sm text-[#94A39B]">
+              From non-invasive clamp telemetry to verified financial and carbon audit reports — engineered specifically for Indian manufacturing panels.
             </p>
           </div>
 
-          {/* Scope Selector: PoC vs Phase 2 */}
-          <div className="inline-flex rounded-xl border border-[#1E3529] bg-[#122019] p-1.5">
+          {/* 2-Tab Mutually Exclusive Toggle */}
+          <div className="inline-flex rounded-xl border border-[#1C2E25] bg-[#101B16] p-1 self-start md:self-end">
             <button
               type="button"
               onClick={() => setActiveTab("poc")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-all ${
+              className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all ${
                 activeTab === "poc"
-                  ? "bg-[#22C55E] text-[#0B1410] shadow-md"
-                  : "text-[#94A3B8] hover:text-[#F8FAFC]"
+                  ? "bg-[#10B981] text-[#0A110E]"
+                  : "text-[#94A39B] hover:text-[#F4F7F5]"
               }`}
             >
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Current PoC Scope</span>
+              Current PoC Architecture
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("phase2")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-all ${
+              className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all ${
                 activeTab === "phase2"
-                  ? "bg-[#22C55E] text-[#0B1410] shadow-md"
-                  : "text-[#94A3B8] hover:text-[#F8FAFC]"
+                  ? "bg-[#10B981] text-[#0A110E]"
+                  : "text-[#94A39B] hover:text-[#F4F7F5]"
               }`}
             >
-              <Layers className="h-3.5 w-3.5" />
-              <span>Phase 2 Scale-Out</span>
+              Phase 2 Scale-Out (Future Roadmap)
             </button>
           </div>
         </div>
 
-        {/* Scope Indicator Banner */}
-        <div className="mb-8 rounded-xl border border-[#1E3529] bg-[#122019]/70 px-4 py-3 text-xs text-[#94A3B8] flex items-center justify-between">
+        {/* Tab Status Bar */}
+        <div className="mb-8 rounded-xl border border-[#1C2E25] bg-[#101B16] px-4 py-3 text-xs text-[#94A39B] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-[#F8FAFC]">
-              {activeTab === "poc" ? "Active Scope (NSA 6.0 PoC Demonstration):" : "Roadmap (Phase 2 Cluster Deployment):"}
+            <span className="font-semibold text-[#F4F7F5]">
+              {activeTab === "poc" ? "Active Proof-of-Concept Topology:" : "Phase 2 Industrial Scale-Out Architecture:"}
             </span>
             <span>
               {activeTab === "poc"
-                ? "Physical non-invasive split-core clamps + ESP32 edge telemetry + real-time statistical idle algorithms."
-                : "200+ mesh nodes per plant, multi-carrier eSIM failover, LoRaWAN, and automated relay shutoff control."}
+                ? "Split-core CT clamp + ESP32 edge microcontroller + statistical idle algorithms + 1-tap floor confirm."
+                : "3-Phase direct sensing, GSM failover, automated BEE ADEETIE compliance reports, and motor drift diagnostics."}
             </span>
           </div>
-          <span className="hidden sm:inline-block rounded bg-[#0B1410] px-2 py-0.5 text-[10px] font-mono text-[#4ADE80]">
-            {activeTab === "poc" ? "READY FOR PILOT" : "PHASE 2 ROADMAP"}
+          <span className="hidden sm:inline-block rounded bg-[#0A110E] px-2.5 py-0.5 text-[10px] font-mono text-[#10B981]">
+            {activeTab === "poc" ? "POC SCOPE" : "FUTURE ROADMAP"}
           </span>
         </div>
 
-        {/* 6 Steps Grid with Flow Connectors */}
+        {/* 6 Replaced Cards Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
+          {activeCards.map((card) => {
+            const Icon = card.icon;
             return (
               <div
-                key={step.num}
-                className="group relative flex flex-col justify-between rounded-xl border border-[#1E3529] bg-[#122019] p-6 transition-all duration-300 hover:border-[#22C55E]/60 hover:bg-[#15271F]"
+                key={card.step}
+                className="flex flex-col justify-between rounded-xl border border-[#1C2E25] bg-[#101B16] p-6 transition-all hover:border-[#2A4739]"
               >
                 <div>
-                  {/* Top Bar with Number & Tag */}
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#4ADE80]">
-                      STEP {step.num}
+                    <span className="font-mono text-xs font-bold text-[#10B981]">
+                      STEP {card.step}
                     </span>
-                    <span className="rounded bg-[#0B1410] px-2 py-0.5 text-[10px] font-mono text-[#94A3B8]">
-                      {step.tag}
+                    <span className="rounded bg-[#0A110E] px-2 py-0.5 text-[10px] font-mono text-[#94A39B]">
+                      {card.tag}
                     </span>
                   </div>
 
-                  {/* Icon & Title */}
                   <div className="mt-4 flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#1E3529] bg-[#0B1410] text-[#22C55E] group-hover:scale-105 group-hover:bg-[#22C55E] group-hover:text-[#0B1410] transition-all">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#1C2E25] bg-[#0A110E] text-[#10B981]">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-[#F8FAFC]">
-                        {step.title}
+                      <h3 className="text-base font-bold text-[#F4F7F5]">
+                        {card.title}
                       </h3>
-                      <div className="text-xs text-[#94A3B8]">
-                        {step.subtitle}
+                      <div className="text-xs text-[#94A39B]">
+                        {card.subtitle}
                       </div>
                     </div>
                   </div>
 
-                  {/* Body Text depending on Active Tab */}
-                  <div className="mt-4 rounded-lg bg-[#0B1410]/70 p-3.5 border border-[#1E3529]/60">
-                    <div className="text-[11px] font-semibold text-[#4ADE80] uppercase tracking-wide mb-1">
-                      {activeTab === "poc" ? "PoC Implementation" : "Phase 2 Expansion"}
-                    </div>
-                    <p className="text-xs leading-relaxed text-[#94A3B8]">
-                      {activeTab === "poc" ? step.pocDetail : step.phase2Detail}
-                    </p>
-                  </div>
+                  <p className="mt-4 text-xs leading-relaxed text-[#94A39B]">
+                    {card.desc}
+                  </p>
                 </div>
 
-                {/* Bottom link indicator */}
-                <div className="mt-5 flex items-center justify-between text-[11px] text-[#94A3B8] border-t border-[#1E3529]/50 pt-3">
-                  <span>
-                    {idx < steps.length - 1 ? `Feeds into Step 0${idx + 2}` : "Continuous Audit Cycle"}
-                  </span>
-                  <ArrowRight className="h-3.5 w-3.5 text-[#22C55E] transition-transform group-hover:translate-x-1" />
+                <div className="mt-6 border-t border-[#1C2E25] pt-3 flex items-center justify-between text-[11px] text-[#94A39B]">
+                  <span>{activeTab === "poc" ? "Edge Pipeline Component" : "Enterprise Roadmap Module"}</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-[#10B981]" />
                 </div>
               </div>
             );

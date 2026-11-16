@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Electrad | Industrial Energy Monitoring & Waste Detection",
+  title: "Electrad | Machine-Level Industrial Energy Intelligence",
   description:
-    "Non-invasive CT clamp + ESP32 monitoring with a statistical baseline engine and 1-tap floor confirmation for Indian industries. Built by Devansh Patel (Founder, WizoupWorks) for India's National Startup Awards 6.0.",
+    "Non-invasive CT clamp and edge telemetry with statistical idle baselines to eliminate industrial power waste across manufacturing facilities.",
   keywords: [
     "Electrad",
     "Industrial Energy Monitoring",
@@ -13,15 +13,12 @@ export const metadata: Metadata = {
     "Compressed Air Leak Detection",
     "Statistical Baseline Engine",
     "CT Clamp ESP32 IoT",
-    "Indian Manufacturing Energy Savings",
-    "National Startup Awards",
-    "WizoupWorks",
+    "Manufacturing Energy Savings",
   ],
-  authors: [{ name: "Devansh Patel (WizoupWorks)" }],
   openGraph: {
     title: "Electrad — Stop Operating Energy-Blind",
     description:
-      "CT clamp + ESP32 edge telemetry and statistical idle baselines to eliminate industrial power waste across Indian MSMEs and enterprises.",
+      "Non-invasive CT clamp monitoring with statistical baselines and 1-tap floor confirmation for industrial operations.",
     type: "website",
   },
 };
@@ -33,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className="min-h-screen bg-[#0B1410] text-[#F8FAFC] antialiased selection:bg-[#22C55E]/30 selection:text-[#4ADE80]">
+      <body className="min-h-screen bg-[#0A110E] text-[#F4F7F5] antialiased selection:bg-[#10B981]/25 selection:text-[#10B981]">
         {children}
       </body>
     </html>

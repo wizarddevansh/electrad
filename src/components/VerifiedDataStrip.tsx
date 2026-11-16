@@ -1,107 +1,103 @@
 import React from "react";
-import { Factory, Wind, Target, Leaf, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 export function VerifiedDataStrip() {
-  const stats = [
+  const cards = [
     {
-      icon: Factory,
-      highlight: "42% Industrial Share",
-      headline: "of India's 15,43,000 GWh Electricity",
+      category: "National Power Demand",
+      metric: "42%",
+      subtitle: "of India's 15,43,000 GWh Electricity",
       description:
-        "Industrial manufacturing is the single largest consumer of grid electricity in India, making energy waste reduction the highest-leverage decarbonization lever.",
-      source: "MoSPI Energy Statistics India 2025",
-      badge: "National Demand",
+        "Industrial manufacturing accounts for 42% of total national electricity consumption, representing the highest-leverage decarbonization target.",
+      sourceLabel: "MoSPI Energy Statistics 2025",
+      sourceUrl:
+        "https://www.mospi.gov.in/sites/default/files/publication_reports/Energy_Statistics_2025/Energy%20Statistics%20India%202025_27032025.pdf",
     },
     {
-      icon: Target,
-      highlight: "60 Phase-1 Clusters",
-      headline: "14 Sectors Under BEE ADEETIE Mandate",
+      category: "BEE ADEETIE Mandate",
+      metric: "60 → 160",
+      subtitle: "Industrial Clusters Across 14 Sectors",
       description:
-        "The Bureau of Energy Efficiency's ADEETIE initiative enforces ≥10% verified energy savings across MSME manufacturing hubs to remain competitive and compliant.",
-      source: "PIB & Bureau of Energy Efficiency (BEE)",
-      badge: "Regulatory Mandate",
+        "BEE's ₹1,000 Cr ADEETIE initiative enforces ≥10% verified energy reductions across designated MSME industrial clusters nationwide.",
+      sourceLabel: "PIB / Ministry of Power (ADEETIE)",
+      sourceUrl: "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2144822",
     },
     {
-      icon: Wind,
-      highlight: "5–35% Factory Power",
-      headline: "Consumed by Compressed Air with ~30% Waste",
+      category: "Pneumatics Waste Vector",
+      metric: "5–35%",
+      subtitle: "of Factory Power with ~30% Waste",
       description:
-        "Pneumatic systems are the 4th industrial utility. Undetected line leaks and unoptimized loading cycles represent ~30% avoidable electrical loss in typical plants.",
-      source: "IGES / JITMAP Energy Benchmarks",
-      badge: "Critical Waste Vector",
+        "Compressed air consumes up to 35% of total plant energy, with ~30% avoidable electrical loss caused by distribution line leaks.",
+      sourceLabel: "IGES / JITMAP India Forging Study",
+      sourceUrl:
+        "https://jitmap.org/files/reports/Compressed-air-system-for-forging-2.pdf",
     },
     {
-      icon: Leaf,
-      highlight: "0.710 kg CO₂ / kWh",
-      headline: "India Grid Emission Factor Baseline",
+      category: "EMS & Carbon Baselines",
+      metric: "11% | 0.710",
+      subtitle: "Avg. Savings & kg CO₂/kWh Factor",
       description:
-        "Every 1,000 kWh of industrial electricity saved eliminates 710 kg of carbon emissions, directly feeding verified ESG reporting and carbon credit claims.",
-      source: "CEA CO₂ Baseline Database v21.0 (2024–25)",
-      badge: "Carbon Multiplier",
+        "IEA benchmarks document 11% average year-one savings from EMS, while CEA certifies India's grid factor at 0.710 kg CO₂ per kWh.",
+      sourceLabel: "IEA EMS Benchmarks / CEA Baseline v21.0",
+      sourceUrl: "https://cea.nic.in/api/cdm-report-version/view-pdf/en/82",
     },
   ];
 
   return (
-    <section id="data-strip" className="relative border-y border-[#1E3529] bg-[#0B1410] py-16">
+    <section className="border-y border-[#1C2E25] bg-[#0A110E] py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#4ADE80]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]"></span>
-              Ground-Truth Industrial Realities
-            </div>
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#F8FAFC] sm:text-3xl">
-              Backed by Verified Indian Energy Data
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#10B981]">
+              Indian Regulatory & Industrial Baselines
+            </span>
+            <h2 className="mt-1.5 text-2xl font-bold tracking-tight text-[#F4F7F5] sm:text-3xl">
+              Grounded in Official Indian Energy Realities
             </h2>
           </div>
-          <p className="max-w-md text-xs text-[#94A3B8] md:text-right">
-            Every metric monitored by Electrad is anchored in official Indian regulatory frameworks and national baseline registries.
+          <p className="max-w-md text-xs text-[#94A39B] md:text-right">
+            Every metric and threshold modeled in Electrad is anchored in official Indian regulatory frameworks and empirical audits.
           </p>
         </div>
 
-        {/* 4 Stat Cards Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, idx) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={idx}
-                className="group relative flex flex-col justify-between rounded-xl border border-[#1E3529] bg-[#122019] p-6 transition-all duration-300 hover:border-[#22C55E]/60 hover:shadow-[0_4px_25px_rgba(34,197,94,0.1)]"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#1E3529] bg-[#0B1410] text-[#4ADE80] transition-colors group-hover:bg-[#22C55E] group-hover:text-[#0B1410]">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <span className="rounded-full border border-[#1E3529] bg-[#0B1410] px-2.5 py-0.5 text-[10px] font-medium text-[#94A3B8]">
-                      {stat.badge}
-                    </span>
-                  </div>
+        {/* Clean 4-Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cards.map((card, idx) => (
+            <div
+              key={idx}
+              className="flex flex-col justify-between rounded-xl border border-[#1C2E25] bg-[#101B16] p-6 transition-all hover:border-[#2A4739]"
+            >
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#94A39B]">
+                  {card.category}
+                </span>
 
-                  <div className="mt-5">
-                    <span className="text-2xl font-extrabold tracking-tight text-[#F8FAFC] group-hover:text-[#4ADE80] transition-colors">
-                      {stat.highlight}
-                    </span>
-                    <h3 className="mt-1 text-sm font-semibold text-[#F8FAFC]/90">
-                      {stat.headline}
-                    </h3>
-                    <p className="mt-2 text-xs leading-relaxed text-[#94A3B8]">
-                      {stat.description}
-                    </p>
+                <div className="mt-4">
+                  <div className="text-3xl font-extrabold font-mono text-[#F4F7F5] tabular-nums tracking-tight">
+                    {card.metric}
                   </div>
-                </div>
-
-                <div className="mt-6 border-t border-[#1E3529]/60 pt-3">
-                  <div className="flex items-center justify-between text-[10px] text-[#94A3B8]">
-                    <span className="font-mono">Footnote Source:</span>
-                    <span className="font-semibold text-[#4ADE80]/90 text-right truncate ml-2">
-                      {stat.source}
-                    </span>
+                  <div className="mt-1 text-xs font-semibold text-[#10B981]">
+                    {card.subtitle}
                   </div>
+                  <p className="mt-2.5 text-xs leading-relaxed text-[#94A39B]">
+                    {card.description}
+                  </p>
                 </div>
               </div>
-            );
-          })}
+
+              <div className="mt-6 border-t border-[#1C2E25] pt-3">
+                <a
+                  href={card.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-1.5 text-[11px] text-[#94A39B] hover:text-[#10B981] transition-colors"
+                >
+                  <span className="truncate">{card.sourceLabel}</span>
+                  <ExternalLink className="h-3 w-3 shrink-0 text-[#94A39B] group-hover:text-[#10B981]" />
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

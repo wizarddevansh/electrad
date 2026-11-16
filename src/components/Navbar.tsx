@@ -2,104 +2,84 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Zap, Activity, Menu, X, ArrowRight, ShieldCheck } from "lucide-react";
+import { ElectradLogo } from "@/components/ElectradLogo";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[#1E3529] bg-[#0B1410]/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        {/* Brand Logo & NSA Tag */}
+    <header className="sticky top-0 z-50 w-full border-b border-[#1C2E25] bg-[#0A110E]/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+        {/* Brand: Logo + Wordmark */}
         <div className="flex items-center gap-3">
           <Link href="/" className="group flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#22C55E] to-[#15803D] text-[#0B1410] shadow-[0_0_15px_rgba(34,197,94,0.35)] transition-transform duration-200 group-hover:scale-105">
-              <Zap className="h-5 w-5 fill-current stroke-[2.5]" />
-            </div>
+            <ElectradLogo className="h-7 w-7 transition-transform duration-200 group-hover:scale-105" />
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-[#F8FAFC]">
-                Electrad
+              <span className="text-lg font-bold tracking-tight text-[#F4F7F5]">
+                ELECTRAD
               </span>
-              <span className="text-[10px] font-medium uppercase tracking-wider text-[#94A3B8]">
-                Industrial Energy Telemetry
+              <span className="text-[10px] font-medium tracking-wider uppercase text-[#94A39B]">
+                Industrial Energy Intelligence
               </span>
             </div>
           </Link>
-
-          <div className="hidden lg:flex items-center gap-1.5 ml-4 rounded-full border border-[#1E3529] bg-[#122019] px-2.5 py-1 text-[11px] font-medium text-[#4ADE80]">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#22C55E] opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22C55E]"></span>
-            </span>
-            <span>NSA 6.0 Finalist • Green & Blue Economy</span>
-          </div>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#94A3B8]">
+        <nav className="hidden lg:flex items-center gap-7 text-xs font-medium text-[#94A39B]">
           <Link
-            href="/#data-strip"
-            className="transition-colors hover:text-[#4ADE80]"
+            href="/#overview"
+            className="transition-colors hover:text-[#F4F7F5]"
           >
-            Verified Data
+            Overview
           </Link>
           <Link
-            href="/#architecture"
-            className="transition-colors hover:text-[#4ADE80]"
+            href="/#how-it-works"
+            className="transition-colors hover:text-[#F4F7F5]"
           >
             How It Works
           </Link>
           <Link
-            href="/#calculator"
-            className="transition-colors hover:text-[#4ADE80]"
+            href="/#simulator"
+            className="transition-colors hover:text-[#F4F7F5]"
           >
-            Savings Calculator
+            Impact Simulator
           </Link>
           <Link
             href="/#business-model"
-            className="transition-colors hover:text-[#4ADE80]"
+            className="transition-colors hover:text-[#F4F7F5]"
           >
             Business Model
           </Link>
           <Link
-            href="/dashboard"
-            className="flex items-center gap-1.5 text-[#F8FAFC] transition-colors hover:text-[#4ADE80]"
+            href="/disclaimer"
+            className="transition-colors hover:text-[#F4F7F5]"
           >
-            <Activity className="h-4 w-4 text-[#22C55E]" />
-            <span>PoC Demo</span>
+            Disclaimer
+          </Link>
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-1 rounded-lg border border-[#1C2E25] bg-[#101B16] px-3.5 py-1.5 font-semibold text-[#F4F7F5] transition-all hover:border-[#10B981] hover:text-[#10B981]"
+          >
+            <span>Live PoC Dashboard</span>
+            <ArrowUpRight className="h-3.5 w-3.5 text-[#10B981]" />
           </Link>
         </nav>
 
-        {/* Action CTAs */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/#pilot"
-            className="rounded-lg border border-[#1E3529] bg-[#122019] px-4 py-2 text-xs font-semibold text-[#F8FAFC] transition-all duration-200 hover:border-[#22C55E]/50 hover:bg-[#16281F]"
-          >
-            Request Pilot
-          </Link>
+        {/* Mobile menu trigger */}
+        <div className="flex lg:hidden items-center gap-2">
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 rounded-lg bg-[#22C55E] px-4 py-2 text-xs font-semibold text-[#0B1410] shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-200 hover:bg-[#4ADE80] hover:shadow-[0_0_25px_rgba(74,222,128,0.5)]"
-          >
-            <span>Live Dashboard</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-
-        {/* Mobile menu button */}
-        <div className="flex md:hidden items-center gap-2">
-          <Link
-            href="/dashboard"
-            className="rounded bg-[#22C55E] px-2.5 py-1.5 text-xs font-semibold text-[#0B1410]"
+            className="rounded-lg border border-[#1C2E25] bg-[#101B16] px-2.5 py-1.5 text-xs font-semibold text-[#10B981]"
           >
             PoC Demo
           </Link>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-lg border border-[#1E3529] p-2 text-[#94A3B8] hover:bg-[#122019] hover:text-[#F8FAFC]"
-            aria-label="Toggle Menu"
+            className="rounded-lg border border-[#1C2E25] p-2 text-[#94A39B] hover:bg-[#101B16] hover:text-[#F4F7F5]"
+            aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -108,54 +88,50 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="border-b border-[#1E3529] bg-[#0B1410] px-4 py-4 md:hidden">
-          <div className="flex flex-col gap-3 text-sm font-medium text-[#94A3B8]">
-            <div className="flex items-center gap-2 rounded-lg border border-[#1E3529] bg-[#122019] px-3 py-2 text-xs text-[#4ADE80]">
-              <ShieldCheck className="h-4 w-4 text-[#22C55E]" />
-              <span>National Startup Awards 6.0 Finalist Entry</span>
-            </div>
+        <div className="border-b border-[#1C2E25] bg-[#0A110E] px-4 py-4 lg:hidden">
+          <div className="flex flex-col gap-2.5 text-sm font-medium text-[#94A39B]">
             <Link
-              href="/#data-strip"
+              href="/#overview"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 hover:text-[#4ADE80]"
+              className="px-2 py-1.5 hover:text-[#F4F7F5]"
             >
-              Verified Indian Data
+              Overview
             </Link>
             <Link
-              href="/#architecture"
+              href="/#how-it-works"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 hover:text-[#4ADE80]"
+              className="px-2 py-1.5 hover:text-[#F4F7F5]"
             >
-              How It Works (6-Step Architecture)
+              How It Works
             </Link>
             <Link
-              href="/#calculator"
+              href="/#simulator"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 hover:text-[#4ADE80]"
+              className="px-2 py-1.5 hover:text-[#F4F7F5]"
             >
-              Savings & CO₂ Calculator
+              Impact Simulator
             </Link>
             <Link
               href="/#business-model"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 hover:text-[#4ADE80]"
+              className="px-2 py-1.5 hover:text-[#F4F7F5]"
             >
-              2-Part Outcome Business Model
+              Business Model
+            </Link>
+            <Link
+              href="/disclaimer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-2 py-1.5 hover:text-[#F4F7F5]"
+            >
+              Disclaimer & Regulatory Notes
             </Link>
             <Link
               href="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-2 py-1.5 text-[#22C55E] font-semibold"
+              className="flex items-center justify-between rounded-lg border border-[#1C2E25] bg-[#101B16] px-3 py-2 text-sm font-semibold text-[#10B981]"
             >
-              <Activity className="h-4 w-4" />
-              <span>Interactive PoC Dashboard</span>
-            </Link>
-            <Link
-              href="/#pilot"
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-2 text-center rounded-lg bg-[#22C55E] py-2.5 text-xs font-semibold text-[#0B1410]"
-            >
-              Request Plant Pilot Setup
+              <span>Launch Live PoC Dashboard</span>
+              <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

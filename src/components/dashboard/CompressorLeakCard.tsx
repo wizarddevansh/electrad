@@ -3,141 +3,136 @@
 import React, { useState } from "react";
 import {
   Wind,
-  AlertTriangle,
   HelpCircle,
-  TrendingDown,
-  Gauge,
-  CheckCircle2,
-  Clock,
-  Sparkles,
+  ExternalLink,
 } from "lucide-react";
 import { formatINR, formatNumber } from "@/lib/utils";
 
 export function CompressorLeakCard() {
-  const [showFormulaExplanation, setShowFormulaExplanation] = useState(false);
+  const [showFormula, setShowFormula] = useState(false);
 
-  // BEE Standard Air Leak calculation parameters
-  const onLoadTimeSec = 14.2; // T
-  const offLoadTimeSec = 38.6; // t
-  const totalCycle = onLoadTimeSec + offLoadTimeSec; // T + t = 52.8s
-  const leakPercentage = (onLoadTimeSec / totalCycle) * 100; // 26.89%
+  const onLoadTimeSec = 14.2;
+  const offLoadTimeSec = 38.6;
+  const totalCycle = onLoadTimeSec + offLoadTimeSec;
+  const leakPercentage = (onLoadTimeSec / totalCycle) * 100;
 
-  const compressorRatedKw = 55; // 55 kW screw compressor
-  const estimatedAnnualWasteKwh = 25694; // kWh lost annually on non-productive cycling
-  const tariffRate = 8.5; // ₹/kWh
-  const annualRupeeWaste = estimatedAnnualWasteKwh * tariffRate; // ~₹2,18,399
-  const annualCo2Tonnes = (estimatedAnnualWasteKwh * 0.71) / 1000; // 18.24 Tonnes
+  const estimatedAnnualWasteKwh = 25694;
+  const tariffRate = 8.5;
+  const annualRupeeWaste = estimatedAnnualWasteKwh * tariffRate;
+  const annualCo2Tonnes = (estimatedAnnualWasteKwh * 0.71) / 1000;
 
   return (
-    <div className="rounded-2xl border border-amber-500/40 bg-gradient-to-b from-[#122019] to-[#0E1A14] p-6 shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#1E3529] pb-4">
+    <div className="rounded-xl border border-[#1C2E25] bg-[#101B16] p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#1C2E25] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F59E0B]/10 text-[#F59E0B]">
             <Wind className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-[#F8FAFC]">
+              <h3 className="text-sm font-semibold text-[#F4F7F5]">
                 BEE Standard Compressor Leak Detection
               </h3>
-              <span className="rounded bg-amber-500/20 px-2 py-0.5 text-[10px] font-mono font-bold text-amber-400">
-                ACTIVE LEAK WARNING
+              <span className="rounded bg-[#F59E0B]/10 border border-[#F59E0B]/30 px-2 py-0.5 text-[10px] font-mono text-[#F59E0B]">
+                LEAK ANOMALY
               </span>
             </div>
-            <p className="text-xs text-[#94A3B8]">
-              Automated on-load vs. off-load duty-cycle analysis conducted during unstaffed breaks without shutting down plant production.
+            <p className="text-xs text-[#94A39B]">
+              Automated on-load vs. off-load duty-cycle analysis conducted during unstaffed breaks without production shutdowns.
             </p>
           </div>
         </div>
 
         <button
           type="button"
-          onClick={() => setShowFormulaExplanation(!showFormulaExplanation)}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E3529] bg-[#0B1410] px-3 py-1.5 text-xs text-[#94A3B8] hover:text-[#F8FAFC]"
+          onClick={() => setShowFormula(!showFormula)}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-[#1C2E25] bg-[#0A110E] px-3 py-1.5 text-xs text-[#94A39B] hover:text-[#F4F7F5] transition-colors"
         >
-          <HelpCircle className="h-3.5 w-3.5 text-[#22C55E]" />
-          <span>{showFormulaExplanation ? "Hide BEE Formula" : "View BEE Formula"}</span>
+          <HelpCircle className="h-3.5 w-3.5 text-[#10B981]" />
+          <span>{showFormula ? "Hide Formula" : "View BEE Standard Formula"}</span>
         </button>
       </div>
 
-      {/* Formula Explanation Drawer */}
-      {showFormulaExplanation && (
-        <div className="mt-4 rounded-xl border border-[#1E3529] bg-[#0B1410] p-4 text-xs text-[#94A3B8] font-mono leading-relaxed">
-          <div className="text-sm font-bold text-[#F8FAFC] font-sans mb-1">
+      {/* Formula Explanation */}
+      {showFormula && (
+        <div className="mt-4 rounded-lg border border-[#1C2E25] bg-[#0A110E] p-4 text-xs text-[#94A39B] font-mono leading-relaxed">
+          <div className="text-xs font-bold text-[#F4F7F5] font-sans mb-1">
             Bureau of Energy Efficiency (BEE) Compressor Audit Standard:
           </div>
-          <div className="rounded-lg bg-[#122019] p-2.5 my-2 text-amber-300">
+          <div className="rounded bg-[#101B16] p-2.5 my-2 text-[#F59E0B]">
             Leakage Ratio % (L) = [ T / (T + t) ] × 100
           </div>
           <p className="text-[11px] font-sans">
             Where <strong>T</strong> = Compressor operating time on load, and <strong>t</strong> = Operating time off load.
-            While standard audits require weekend plant shutdowns, Electrad isolates non-operating windows (lunch breaks, shift changes) automatically via edge telemetry to compute this metric 24/7.
+            Traditional audits mandate weekend plant shutdowns. Electrad isolates unstaffed break windows automatically via edge telemetry to compute this metric continuously.
           </p>
         </div>
       )}
 
-      {/* Duty Cycle Breakdown Grid */}
+      {/* Duty Cycle Breakdown */}
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* On-Load Time */}
-        <div className="rounded-xl border border-[#1E3529] bg-[#0B1410] p-4">
-          <div className="text-[11px] text-[#94A3B8]">On-Load Operating Time (T)</div>
+        <div className="rounded-lg border border-[#1C2E25] bg-[#0A110E] p-4">
+          <div className="text-[11px] text-[#94A39B]">On-Load Time (T)</div>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold font-mono text-amber-400">
+            <span className="text-2xl font-bold font-mono text-[#F59E0B] tabular-nums">
               {onLoadTimeSec}
             </span>
-            <span className="text-xs text-[#94A3B8]">seconds</span>
+            <span className="text-xs text-[#94A39B]">seconds</span>
           </div>
-          <div className="mt-1 text-[10px] text-[#94A3B8]">Pumping against distribution leaks</div>
+          <div className="mt-1 text-[10px] text-[#94A39B]">Pumping against air line leaks</div>
         </div>
 
-        {/* Off-Load Time */}
-        <div className="rounded-xl border border-[#1E3529] bg-[#0B1410] p-4">
-          <div className="text-[11px] text-[#94A3B8]">Off-Load Idling Time (t)</div>
+        <div className="rounded-lg border border-[#1C2E25] bg-[#0A110E] p-4">
+          <div className="text-[11px] text-[#94A39B]">Off-Load Idling Time (t)</div>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold font-mono text-[#F8FAFC]">
+            <span className="text-2xl font-bold font-mono text-[#F4F7F5] tabular-nums">
               {offLoadTimeSec}
             </span>
-            <span className="text-xs text-[#94A3B8]">seconds</span>
+            <span className="text-xs text-[#94A39B]">seconds</span>
           </div>
-          <div className="mt-1 text-[10px] text-[#94A3B8]">Unloaded motor draw: 14.8 kW</div>
+          <div className="mt-1 text-[10px] text-[#94A39B]">Unloaded idle draw: 14.8 kW</div>
         </div>
 
-        {/* Calculated Leakage Ratio */}
-        <div className="rounded-xl border border-rose-500/40 bg-[#0B1410] p-4">
-          <div className="text-[11px] text-rose-300 font-semibold">Total Air Leakage Ratio (L)</div>
+        <div className="rounded-lg border border-[#EF4444]/30 bg-[#0A110E] p-4">
+          <div className="text-[11px] text-[#EF4444]">Total Air Leakage Ratio (L)</div>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-extrabold font-mono text-rose-400">
+            <span className="text-2xl font-bold font-mono text-[#EF4444] tabular-nums">
               {leakPercentage.toFixed(1)}%
             </span>
-            <span className="text-xs font-semibold text-rose-300">of capacity</span>
+            <span className="text-xs text-[#EF4444]">of capacity</span>
           </div>
-          <div className="mt-1 text-[10px] text-rose-300/80">
+          <div className="mt-1 text-[10px] text-[#EF4444]/80">
             Acceptable industry threshold: &lt; 10%
           </div>
         </div>
       </div>
 
-      {/* Financial & Environmental Waste Impact */}
-      <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border border-[#1E3529] bg-[#0B1410]/70 p-4">
-        <div className="space-y-1">
-          <div className="text-xs text-[#94A3B8]">
-            Estimated Preventable Electrical Loss at Current Leak Velocity:
+      {/* Financial Impact */}
+      <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-lg border border-[#1C2E25] bg-[#0A110E] p-4">
+        <div className="space-y-0.5">
+          <div className="text-xs text-[#94A39B]">
+            Estimated Preventable Loss at Current Leak Velocity:
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-xl font-bold font-mono text-[#22C55E]">
+            <span className="text-lg font-bold font-mono text-[#10B981] tabular-nums">
               {formatINR(annualRupeeWaste)} / year
             </span>
-            <span className="text-xs text-[#94A3B8]">•</span>
-            <span className="text-sm font-semibold font-mono text-[#4ADE80]">
+            <span className="text-xs text-[#94A39B]">•</span>
+            <span className="text-xs font-mono text-[#10B981] tabular-nums">
               {formatNumber(annualCo2Tonnes)} Tonnes CO₂ / year
             </span>
           </div>
         </div>
 
-        <div className="text-xs text-[#94A3B8] text-right">
-          <span className="block font-semibold text-[#F8FAFC]">Non-Invasive Verification:</span>
-          <span>Zero pressure drops or pipe cutting required</span>
-        </div>
+        <a
+          href="https://jitmap.org/files/reports/Compressed-air-system-for-forging-2.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-[#94A39B] hover:text-[#10B981] inline-flex items-center gap-1"
+        >
+          <span>JITMAP Compressed Air Study Reference</span>
+          <ExternalLink className="h-3 w-3" />
+        </a>
       </div>
     </div>
   );

@@ -1,13 +1,11 @@
-# Electrad — Industrial Energy Monitoring & Waste Detection
+# Electrad — Industrial Energy Intelligence & Waste Detection
 
 > **"Stop Operating Energy-Blind"**  
-> Non-invasive CT clamp + ESP32 edge telemetry with a statistical baseline engine and 1-tap floor confirmation for Indian industries of all scales.
-
-Built by **Devansh Patel** (Founder, WizoupWorks) for India's **National Startup Awards (NSA) 6.0** (Young Changemakers • Green & Blue Economy Track).
+> Non-invasive CT clamp + ESP32 edge telemetry with a statistical baseline engine and 1-tap floor confirmation for Indian industrial facilities.
 
 ---
 
-## ⚡ The Ground-Truth Problem in Indian Manufacturing
+## ⚡ Ground-Truth Energy Waste in Indian Manufacturing
 
 1. **42% Industrial Electricity Share**: Industry is the single largest consumer of India's **15,43,000 GWh** total electricity consumption (*MoSPI Energy Statistics India 2025*).
 2. **BEE ADEETIE Mandate**: **60 Phase-1 Industrial Clusters** across **14 sectors** are required to demonstrate **≥10% verified energy savings** (*PIB / Bureau of Energy Efficiency*).
@@ -32,21 +30,20 @@ Built by **Devansh Patel** (Founder, WizoupWorks) for India's **National Startup
 
 ---
 
-## 💼 2-Part Transparent Business Model
+## 💼 Transparent Business Model
 
-- **Part 1: Non-Invasive Hardware Kit**: Scoped transparently to the facility size and circuit branching (split-core CT clamps, IP65 industrial enclosure, ESP32 gateway module, and on-site phase calibration). No arbitrary fixed BOM inflation.
-- **Part 2: Outcome-Aligned SaaS**:
+- **Hardware Scope**: Non-invasive hardware kit scoped to facility size and circuit branching (split-core CT clamps, IP65 industrial enclosure, ESP32 gateway module, and on-site phase calibration).
+- **Outcome-Aligned Tiering**:
   - **Verified Savings > ₹10,000/month**: **₹0 base software fee**. Electrad bills an agreed percentage cut of *only* verified savings proven on the plant floor.
-  - **Verified Savings ≤ ₹10,000/month**: Nominal base maintenance subscription covering MQTT cloud pipeline, alert dispatch, and compliance report exports.
+  - **Verified Savings ≤ ₹10,000/month**: Nominal base maintenance subscription covering MQTT cloud pipeline, telemetry storage, and compliance report exports.
 
 ---
 
 ## 🚀 Zero-Dependency Architecture
 
 This web application is **100% self-contained and client-side resilient**:
-- **Zero Database Required**: All state (1-Tap floor confirmations, verified ledger updates, simulated feeder telemetry, and pilot inquiries) runs safely in React state + `localStorage`.
+- **Zero Database Required**: All state (1-Tap floor confirmations, verified ledger updates, simulated feeder telemetry, and interactive controls) runs safely in React state + `localStorage`.
 - **Zero Environment Variables Required**: Builds and deploys instantly on Vercel without configuring `.env` keys.
-- **Direct Founder Reachout**: One-click direct email link to `wizarddevansh21@gmail.com` for immediate pilot scheduling.
 
 ---
 
@@ -54,7 +51,7 @@ This web application is **100% self-contained and client-side resilient**:
 
 ### 1. Installation
 ```bash
-git clone <repo-url> electrad
+git clone https://github.com/wizarddevansh/electrad-nsa6.git electrad
 cd electrad
 npm install
 ```
@@ -75,20 +72,18 @@ npm run start
 
 ## 🎨 Visual & Brand System
 
-- **Background**: Deep Charcoal-Green (`#0B1410`)
-- **Card Surfaces**: Elevated Industrial Dark Slate (`#122019`)
-- **Borders**: Subdued Forest Grid (`#1E3529`)
-- **Primary Text**: Crisp White (`#F8FAFC`)
-- **Secondary Text**: Muted Sage (`#94A3B8`)
-- **Neon-Mint Accent**: (`#22C55E` / `#4ADE80`)
-- **Warning & Anomaly**: Amber (`#F59E0B`) & Alert Rose (`#EF4444`)
+- **Background**: Deep Charcoal Canvas (`#0A110E`)
+- **Card Surfaces**: Elevated Industrial Dark Slate (`#101B16`)
+- **Borders**: Subdued Grid (`#1C2E25`)
+- **Primary Text**: Crisp Off-White (`#F4F7F5`)
+- **Secondary Text**: Muted Sage (`#94A39B`)
+- **Brand Accent**: Emerald Green (`#10B981`)
+- **Status Indicators**: Normal (`#10B981`), Amber (`#F59E0B`), Alert (`#EF4444`)
 
 ---
 
-## 🏆 National Startup Awards (NSA) 6.0
+## ⚖️ Disclaimer
 
-- **Track**: Young Changemakers • Green & Blue Economy
-- **Founder**: Devansh Patel
-- **Studio**: WizoupWorks
-- **Contact**: [wizarddevansh21@gmail.com](mailto:wizarddevansh21@gmail.com)
-- **Brand**: Electrad
+Electrad is an illustrative technology concept and interactive proof-of-concept (PoC) demonstration for industrial energy monitoring. Telemetry feeds shown in the demonstration dashboard are simulated models for illustrative purposes. For citations and methodology, see `/disclaimer`.
+
+© 2026 Electrad. Illustrative Concept & PoC Demonstration.

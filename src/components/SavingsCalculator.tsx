@@ -7,9 +7,8 @@ import {
   Leaf,
   Zap,
   TrendingDown,
-  ArrowRight,
-  Sparkles,
   Info,
+  ExternalLink,
 } from "lucide-react";
 import { formatINR, formatNumber } from "@/lib/utils";
 
@@ -18,6 +17,7 @@ interface TariffPreset {
   name: string;
   rate: number;
   description: string;
+  orderUrl?: string;
 }
 
 const TARIFF_PRESETS: TariffPreset[] = [
@@ -25,31 +25,29 @@ const TARIFF_PRESETS: TariffPreset[] = [
     id: "up-lmv6",
     name: "UPERC LMV-6 (₹9.02)",
     rate: 9.02,
-    description: "MSME Light & Medium Power (Uttar Pradesh / North India)",
+    description: "Small & Medium Power (< 50 kW/kVA) — North India DISCOMs",
+    orderUrl: "https://www.uperc.org/App_File/DiscomsPressNote-pdf72202640356PM.pdf",
   },
   {
     id: "up-hv2",
     name: "UPERC HV-2 (₹7.97)",
     rate: 7.97,
-    description: "Heavy Industrial High Voltage (Continuous Process / Forging)",
+    description: "Heavy Industrial / High Voltage (Continuous Process / Forging)",
+    orderUrl: "https://www.uperc.org/App_File/DiscomsPressNote-pdf72202640356PM.pdf",
   },
   {
     id: "custom",
     name: "Custom Tariff",
     rate: 8.5,
-    description: "Enter your factory's blended ₹/kWh discom rate",
+    description: "Specify your plant's blended energy rate per kWh",
   },
 ];
 
-export function SavingsCalculator({
-  onSelectEstimate,
-}: {
-  onSelectEstimate?: (bill: number, savings: number) => void;
-}) {
+export function SavingsCalculator() {
   const [monthlyBill, setMonthlyBill] = useState<number>(650000); // ₹6.5 Lakhs default
   const [selectedTariffId, setSelectedTariffId] = useState<string>("up-lmv6");
   const [customTariff, setCustomTariff] = useState<number>(8.5);
-  const [savingsPercent, setSavingsPercent] = useState<number>(10); // 10% ADEETIE default
+  const [savingsPercent, setSavingsPercent] = useState<number>(10); // 10% BEE ADEETIE default
 
   const effectiveTariff = useMemo(() => {
     if (selectedTariffId === "custom") {
@@ -59,72 +57,62 @@ export function SavingsCalculator({
     return found ? found.rate : 9.02;
   }, [selectedTariffId, customTariff]);
 
-  // Calculations:
-  // Total Monthly kWh Consumed = Monthly Bill / Tariff
-  // Monthly kWh Saved = Total Monthly kWh * (Savings % / 100)
-  // Monthly ₹ Saved = Monthly Bill * (Savings % / 100)
+  // Exact Formulas:
+  // Estimated Monthly kWh = Monthly Bill (₹) / Selected Tariff (₹/kWh)
+  // Monthly kWh Saved = Estimated Monthly kWh * (Target Savings % / 100)
+  // Monthly ₹ Saved = Monthly kWh Saved * Selected Tariff (₹/kWh)
   // Annual ₹ Saved = Monthly ₹ Saved * 12
-  // Annual kWh Saved = Monthly kWh Saved * 12
-  // Annual CO₂ Avoided (Tonnes) = (Annual kWh Saved * 0.710) / 1000
+  // Monthly CO₂ Avoided (Tonnes) = (Monthly kWh Saved * 0.710) / 1000
+  // Annual CO₂ Avoided (Tonnes) = Monthly CO₂ Avoided * 12
   const metrics = useMemo(() => {
     const bill = Math.max(10000, monthlyBill);
-    const totalKwh = bill / effectiveTariff;
-    const monthlyKwhSaved = totalKwh * (savingsPercent / 100);
-    const monthlyRupeesSaved = bill * (savingsPercent / 100);
+    const estimatedMonthlyKwh = bill / effectiveTariff;
+    const monthlyKwhSaved = estimatedMonthlyKwh * (savingsPercent / 100);
+    const monthlyRupeesSaved = monthlyKwhSaved * effectiveTariff;
     const annualRupeesSaved = monthlyRupeesSaved * 12;
-    const annualKwhSaved = monthlyKwhSaved * 12;
-    const annualCo2Tonnes = (annualKwhSaved * 0.71) / 1000;
+    const monthlyCo2Tonnes = (monthlyKwhSaved * 0.710) / 1000;
+    const annualCo2Tonnes = monthlyCo2Tonnes * 12;
 
     return {
+      estimatedMonthlyKwh,
       monthlyKwhSaved,
       monthlyRupeesSaved,
       annualRupeesSaved,
-      annualKwhSaved,
+      monthlyCo2Tonnes,
       annualCo2Tonnes,
     };
   }, [monthlyBill, effectiveTariff, savingsPercent]);
 
-  const handleApplyToPilot = () => {
-    if (onSelectEstimate) {
-      onSelectEstimate(monthlyBill, metrics.annualRupeesSaved);
-    }
-    const pilotSection = document.getElementById("pilot");
-    if (pilotSection) {
-      pilotSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <section id="calculator" className="relative bg-[#0B1410] py-20 border-b border-[#1E3529]">
+    <section id="simulator" className="relative bg-[#0A110E] py-20 border-b border-[#1C2E25]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#1E3529] bg-[#122019] px-3 py-1 text-xs font-semibold text-[#4ADE80] uppercase tracking-wider">
-            <Calculator className="h-3.5 w-3.5 text-[#22C55E]" />
-            <span>Interactive Industrial ROI Engine</span>
-          </div>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#F8FAFC] sm:text-4xl">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#10B981]">
+            Interactive Industrial Impact Simulator
+          </span>
+          <h2 className="mt-1.5 text-3xl font-extrabold tracking-tight text-[#F4F7F5] sm:text-4xl">
             Simulate Your Plant's Waste Elimination & ESG Impact
           </h2>
-          <p className="mt-3 text-sm text-[#94A3B8]">
-            Input your monthly discom electricity bill and select your industrial tariff structure to calculate verified rupee savings and CEA-certified carbon reductions.
+          <p className="mt-2.5 text-sm text-[#94A39B]">
+            Model financial and carbon avoidance benchmarks using official state DISCOM tariffs and the Central Electricity Authority (CEA) emission baseline.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
           {/* Inputs Column */}
-          <div className="lg:col-span-7 rounded-2xl border border-[#1E3529] bg-[#122019] p-6 sm:p-8">
-            <h3 className="text-base font-bold text-[#F8FAFC] flex items-center gap-2">
-              <Zap className="h-4 w-4 text-[#22C55E]" />
+          <div className="lg:col-span-7 rounded-xl border border-[#1C2E25] bg-[#101B16] p-6 sm:p-8">
+            <h3 className="text-sm font-semibold text-[#F4F7F5] flex items-center gap-2">
+              <Zap className="h-4 w-4 text-[#10B981]" />
               <span>Plant Energy Parameters</span>
             </h3>
 
             {/* Monthly Bill Input & Slider */}
             <div className="mt-6">
               <div className="flex items-center justify-between text-xs">
-                <label htmlFor="monthly-bill" className="font-semibold text-[#F8FAFC]">
+                <label htmlFor="monthly-bill" className="font-medium text-[#F4F7F5]">
                   Monthly Electricity Bill (₹)
                 </label>
-                <span className="font-mono text-base font-bold text-[#22C55E]">
+                <span className="font-mono text-base font-bold text-[#10B981] tabular-nums">
                   {formatINR(monthlyBill)}
                 </span>
               </div>
@@ -138,10 +126,10 @@ export function SavingsCalculator({
                   step="25000"
                   value={monthlyBill}
                   onChange={(e) => setMonthlyBill(Number(e.target.value))}
-                  className="w-full h-2 bg-[#0B1410] rounded-lg appearance-none cursor-pointer accent-[#22C55E]"
+                  className="w-full h-1.5 bg-[#0A110E] rounded-lg appearance-none cursor-pointer accent-[#10B981]"
                 />
-                <div className="mt-1 flex justify-between text-[10px] text-[#94A3B8]">
-                  <span>₹50,000 (Small MSME)</span>
+                <div className="mt-1 flex justify-between text-[10px] text-[#94A39B]">
+                  <span>₹50,000 (Small Unit)</span>
                   <span>₹10,00,000</span>
                   <span>₹50,00,000+ (Heavy Plant)</span>
                 </div>
@@ -152,7 +140,7 @@ export function SavingsCalculator({
                 {[
                   { label: "₹2.5 Lakhs", val: 250000 },
                   { label: "₹6.5 Lakhs (Avg MSME)", val: 650000 },
-                  { label: "₹15 Lakhs", val: 150000 },
+                  { label: "₹15 Lakhs", val: 1500000 },
                   { label: "₹35 Lakhs", val: 3500000 },
                 ].map((chip) => (
                   <button
@@ -161,8 +149,8 @@ export function SavingsCalculator({
                     onClick={() => setMonthlyBill(chip.val)}
                     className={`rounded-lg border px-2.5 py-1 text-xs font-mono transition-all ${
                       monthlyBill === chip.val
-                        ? "border-[#22C55E] bg-[#22C55E]/15 text-[#4ADE80]"
-                        : "border-[#1E3529] bg-[#0B1410] text-[#94A3B8] hover:text-[#F8FAFC]"
+                        ? "border-[#10B981] bg-[#10B981]/10 text-[#10B981]"
+                        : "border-[#1C2E25] bg-[#0A110E] text-[#94A39B] hover:text-[#F4F7F5]"
                     }`}
                   >
                     {chip.label}
@@ -173,9 +161,21 @@ export function SavingsCalculator({
 
             {/* Tariff Selector */}
             <div className="mt-8">
-              <label className="block text-xs font-semibold text-[#F8FAFC] mb-2">
-                Industrial Tariff Structure (State Discom)
-              </label>
+              <div className="flex items-center justify-between text-xs mb-2">
+                <label className="font-medium text-[#F4F7F5]">
+                  Industrial Tariff Structure (DISCOM)
+                </label>
+                <a
+                  href="https://www.uperc.org/App_File/DiscomsPressNote-pdf72202640356PM.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] text-[#94A39B] hover:text-[#10B981] inline-flex items-center gap-1"
+                >
+                  <span>UPERC FY 2026–27 Order</span>
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 {TARIFF_PRESETS.map((t) => (
                   <button
@@ -184,12 +184,12 @@ export function SavingsCalculator({
                     onClick={() => setSelectedTariffId(t.id)}
                     className={`text-left rounded-xl border p-3 transition-all ${
                       selectedTariffId === t.id
-                        ? "border-[#22C55E] bg-[#22C55E]/10 text-[#F8FAFC]"
-                        : "border-[#1E3529] bg-[#0B1410] text-[#94A3B8] hover:border-[#22C55E]/40"
+                        ? "border-[#10B981] bg-[#10B981]/10 text-[#F4F7F5]"
+                        : "border-[#1C2E25] bg-[#0A110E] text-[#94A39B] hover:border-[#2A4739]"
                     }`}
                   >
-                    <div className="text-xs font-bold text-[#F8FAFC]">{t.name}</div>
-                    <div className="mt-1 text-[10px] text-[#94A3B8] line-clamp-2">
+                    <div className="text-xs font-bold text-[#F4F7F5]">{t.name}</div>
+                    <div className="mt-1 text-[10px] text-[#94A39B] line-clamp-2">
                       {t.description}
                     </div>
                   </button>
@@ -197,20 +197,20 @@ export function SavingsCalculator({
               </div>
 
               {selectedTariffId === "custom" && (
-                <div className="mt-3 flex items-center gap-3 rounded-lg border border-[#1E3529] bg-[#0B1410] px-3 py-2">
-                  <span className="text-xs text-[#94A3B8]">Custom Rate:</span>
+                <div className="mt-3 flex items-center gap-3 rounded-lg border border-[#1C2E25] bg-[#0A110E] px-3 py-2">
+                  <span className="text-xs text-[#94A39B]">Custom Rate:</span>
                   <div className="flex items-center gap-1 font-mono">
-                    <span className="text-xs text-[#4ADE80]">₹</span>
+                    <span className="text-xs text-[#10B981]">₹</span>
                     <input
                       type="number"
                       step="0.1"
                       min="4"
-                      max="20"
+                      max="25"
                       value={customTariff}
                       onChange={(e) => setCustomTariff(Number(e.target.value))}
-                      className="w-20 bg-transparent text-sm font-bold text-[#F8FAFC] focus:outline-none"
+                      className="w-20 bg-transparent text-sm font-bold text-[#F4F7F5] focus:outline-none"
                     />
-                    <span className="text-xs text-[#94A3B8]">/ kWh</span>
+                    <span className="text-xs text-[#94A39B]">/ kWh</span>
                   </div>
                 </div>
               )}
@@ -219,10 +219,10 @@ export function SavingsCalculator({
             {/* Target Savings Percentage */}
             <div className="mt-8">
               <div className="flex items-center justify-between text-xs">
-                <label htmlFor="target-savings" className="font-semibold text-[#F8FAFC]">
+                <label htmlFor="target-savings" className="font-medium text-[#F4F7F5]">
                   Target Waste Elimination Percentage
                 </label>
-                <span className="font-mono text-base font-bold text-[#4ADE80]">
+                <span className="font-mono text-base font-bold text-[#10B981] tabular-nums">
                   {savingsPercent}%
                 </span>
               </div>
@@ -232,38 +232,25 @@ export function SavingsCalculator({
                 <button
                   type="button"
                   onClick={() => setSavingsPercent(10)}
-                  className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
                     savingsPercent === 10
-                      ? "border-[#22C55E] bg-[#22C55E] text-[#0B1410]"
-                      : "border-[#1E3529] bg-[#0B1410] text-[#94A3B8] hover:text-[#F8FAFC]"
+                      ? "border-[#10B981] bg-[#10B981] text-[#0A110E] font-semibold"
+                      : "border-[#1C2E25] bg-[#0A110E] text-[#94A39B] hover:text-[#F4F7F5]"
                   }`}
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  <span>10% ADEETIE Mandate</span>
+                  10% BEE ADEETIE Threshold
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setSavingsPercent(11)}
-                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
                     savingsPercent === 11
-                      ? "border-[#22C55E] bg-[#22C55E] text-[#0B1410]"
-                      : "border-[#1E3529] bg-[#0B1410] text-[#94A3B8] hover:text-[#F8FAFC]"
+                      ? "border-[#10B981] bg-[#10B981] text-[#0A110E] font-semibold"
+                      : "border-[#1C2E25] bg-[#0A110E] text-[#94A39B] hover:text-[#F4F7F5]"
                   }`}
                 >
-                  <span>11% IEA Benchmark</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSavingsPercent(18)}
-                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
-                    savingsPercent === 18
-                      ? "border-[#22C55E] bg-[#22C55E] text-[#0B1410]"
-                      : "border-[#1E3529] bg-[#0B1410] text-[#94A3B8] hover:text-[#F8FAFC]"
-                  }`}
-                >
-                  <span>18% (Pneumatics + Idle)</span>
+                  11% IEA EMS Benchmark
                 </button>
               </div>
 
@@ -276,11 +263,11 @@ export function SavingsCalculator({
                   step="1"
                   value={savingsPercent}
                   onChange={(e) => setSavingsPercent(Number(e.target.value))}
-                  className="w-full h-2 bg-[#0B1410] rounded-lg appearance-none cursor-pointer accent-[#22C55E]"
+                  className="w-full h-1.5 bg-[#0A110E] rounded-lg appearance-none cursor-pointer accent-[#10B981]"
                 />
-                <div className="mt-1 flex justify-between text-[10px] text-[#94A3B8]">
+                <div className="mt-1 flex justify-between text-[10px] text-[#94A39B]">
                   <span>5% (Conservative)</span>
-                  <span>15% (Typical MSME)</span>
+                  <span>10% (BEE Mandate)</span>
                   <span>30% (High Leak Facilities)</span>
                 </div>
               </div>
@@ -288,83 +275,85 @@ export function SavingsCalculator({
           </div>
 
           {/* Results Output Column */}
-          <div className="lg:col-span-5 rounded-2xl border border-[#22C55E]/40 bg-gradient-to-b from-[#122019] to-[#0E1A14] p-6 sm:p-8 shadow-[0_0_30px_rgba(34,197,94,0.12)]">
-            <div className="flex items-center justify-between border-b border-[#1E3529] pb-4">
-              <span className="text-xs font-mono font-semibold uppercase text-[#4ADE80]">
-                Verified Outcome Projection
+          <div className="lg:col-span-5 rounded-xl border border-[#1C2E25] bg-[#101B16] p-6 sm:p-8">
+            <div className="flex items-center justify-between border-b border-[#1C2E25] pb-4">
+              <span className="text-xs font-mono font-medium uppercase text-[#10B981]">
+                Illustrative Projections
               </span>
-              <span className="rounded bg-[#22C55E]/20 px-2 py-0.5 text-[10px] font-mono text-[#22C55E]">
-                CEA Baseline v21.0
-              </span>
+              <a
+                href="https://cea.nic.in/api/cdm-report-version/view-pdf/en/82"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-mono text-[#94A39B] hover:text-[#10B981] flex items-center gap-1"
+              >
+                <span>CEA Baseline v21.0 (0.710 kg/kWh)</span>
+                <ExternalLink className="h-2.5 w-2.5" />
+              </a>
             </div>
 
-            {/* Big Annual Savings Number */}
+            {/* Annual Savings Number */}
             <div className="mt-6">
-              <div className="text-xs font-medium text-[#94A3B8]">Annual Verified Savings</div>
-              <div className="mt-1 text-3xl sm:text-4xl font-extrabold font-mono tracking-tight text-[#22C55E]">
+              <div className="text-xs font-medium text-[#94A39B]">Projected Annual Verified Savings</div>
+              <div className="mt-1 text-3xl font-extrabold font-mono tracking-tight text-[#10B981] tabular-nums">
                 {formatINR(metrics.annualRupeesSaved)}
               </div>
-              <div className="mt-1 text-xs text-[#94A3B8]">
-                Discom electricity waste stopped and retained on bottom line
+              <div className="mt-1 text-[11px] text-[#94A39B]">
+                Formula: Monthly ₹ Saved ({formatINR(metrics.monthlyRupeesSaved)}) × 12 months
               </div>
             </div>
 
-            {/* Detailed Metric Cards */}
+            {/* Detailed Metric Cards with Plain Formulas */}
             <div className="mt-6 space-y-3">
-              <div className="flex items-center justify-between rounded-xl border border-[#1E3529] bg-[#0B1410]/80 p-3.5">
-                <div>
-                  <div className="text-[11px] text-[#94A3B8]">Monthly Cash Savings</div>
-                  <div className="text-sm font-bold font-mono text-[#F8FAFC]">
-                    {formatINR(metrics.monthlyRupeesSaved)} / month
-                  </div>
+              <div className="rounded-lg border border-[#1C2E25] bg-[#0A110E] p-3.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-[#94A39B]">Monthly Cost Avoidance</span>
+                  <IndianRupee className="h-4 w-4 text-[#10B981]" />
                 </div>
-                <IndianRupee className="h-5 w-5 text-[#4ADE80]" />
+                <div className="text-base font-bold font-mono text-[#F4F7F5] tabular-nums mt-0.5">
+                  {formatINR(metrics.monthlyRupeesSaved)} / month
+                </div>
+                <div className="text-[10px] font-mono text-[#94A39B] mt-1">
+                  Monthly kWh Saved ({formatNumber(metrics.monthlyKwhSaved)}) × ₹{effectiveTariff.toFixed(2)}/kWh
+                </div>
               </div>
 
-              <div className="flex items-center justify-between rounded-xl border border-[#1E3529] bg-[#0B1410]/80 p-3.5">
-                <div>
-                  <div className="text-[11px] text-[#94A3B8]">Monthly Electrical Energy Saved</div>
-                  <div className="text-sm font-bold font-mono text-[#F8FAFC]">
-                    {formatNumber(metrics.monthlyKwhSaved)} kWh
-                  </div>
+              <div className="rounded-lg border border-[#1C2E25] bg-[#0A110E] p-3.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-[#94A39B]">Monthly Energy Saved</span>
+                  <Zap className="h-4 w-4 text-[#F59E0B]" />
                 </div>
-                <Zap className="h-5 w-5 text-amber-400" />
+                <div className="text-base font-bold font-mono text-[#F4F7F5] tabular-nums mt-0.5">
+                  {formatNumber(metrics.monthlyKwhSaved)} kWh / month
+                </div>
+                <div className="text-[10px] font-mono text-[#94A39B] mt-1">
+                  Bill (₹{formatINR(monthlyBill)}) ÷ ₹{effectiveTariff.toFixed(2)}/kWh × {savingsPercent}% target
+                </div>
               </div>
 
-              <div className="flex items-center justify-between rounded-xl border border-[#1E3529] bg-[#0B1410]/80 p-3.5">
-                <div>
-                  <div className="text-[11px] text-[#94A3B8]">Annual Carbon Avoidance</div>
-                  <div className="text-sm font-bold font-mono text-[#4ADE80]">
-                    {formatNumber(metrics.annualCo2Tonnes)} Tonnes CO₂
-                  </div>
-                  <div className="text-[10px] text-[#94A3B8]">
-                    Calculated @ 0.710 kg CO₂/kWh CEA factor
-                  </div>
+              <div className="rounded-lg border border-[#1C2E25] bg-[#0A110E] p-3.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-[#94A39B]">Annual Scope 2 CO₂ Avoidance</span>
+                  <Leaf className="h-4 w-4 text-[#10B981]" />
                 </div>
-                <Leaf className="h-5 w-5 text-[#22C55E]" />
+                <div className="text-base font-bold font-mono text-[#10B981] tabular-nums mt-0.5">
+                  {formatNumber(metrics.annualCo2Tonnes)} Tonnes CO₂ / year
+                </div>
+                <div className="text-[10px] font-mono text-[#94A39B] mt-1">
+                  (Annual kWh Saved × 0.710 kg CO₂/kWh) ÷ 1,000
+                </div>
               </div>
             </div>
 
-            {/* Outcome SaaS Highlight */}
-            <div className="mt-6 rounded-xl border border-[#1E3529] bg-[#0B1410] p-4 text-xs text-[#94A3B8]">
-              <div className="flex items-center gap-1.5 font-semibold text-[#F8FAFC]">
-                <Info className="h-4 w-4 text-[#22C55E]" />
-                <span>Zero Risk: Outcome-Aligned SaaS</span>
+            {/* Required Visible Disclaimer Box */}
+            <div className="mt-6 rounded-lg border border-[#1C2E25] bg-[#0A110E] p-4 text-xs text-[#94A39B] leading-relaxed">
+              <div className="flex items-center gap-1.5 font-semibold text-[#F4F7F5] mb-1">
+                <Info className="h-4 w-4 text-[#10B981] shrink-0" />
+                <span>Simulation Disclaimer</span>
               </div>
-              <p className="mt-1 text-[11px] leading-relaxed">
-                Under the Electrad model, if monthly savings exceed ₹10,000, software fees are a simple percentage of proven savings — <strong className="text-[#4ADE80]">₹0 base software fee</strong>.
+              <p className="text-[11px]">
+                All calculations and figures shown are approximate and illustrative only. Actual factory energy use, savings, and CO₂ reductions vary based on equipment condition, duty cycles, power factor, and state DISCOM tariff structures.
               </p>
             </div>
-
-            {/* Action CTA */}
-            <button
-              type="button"
-              onClick={handleApplyToPilot}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#22C55E] py-3.5 text-sm font-bold text-[#0B1410] shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all hover:bg-[#4ADE80]"
-            >
-              <span>Lock In Pilot with this Estimate</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
       </div>
