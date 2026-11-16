@@ -14,7 +14,7 @@ import {
 
 export function Hero() {
   return (
-    <section id="overview" className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28">
+    <section id="overview" className="relative overflow-hidden pt-28 pb-20 sm:pt-32 md:pt-36 md:pb-28">
       {/* Subtle Ambient Industrial Backdrop */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[450px] w-[700px] -translate-x-1/2 rounded-full bg-[#10B981]/10 blur-[100px]" />
 

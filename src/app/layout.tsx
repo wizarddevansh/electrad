@@ -15,6 +15,14 @@ export const metadata: Metadata = {
     "CT Clamp ESP32 IoT",
     "Manufacturing Energy Savings",
   ],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-icon.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     title: "Electrad — Stop Operating Energy-Blind",
     description:
