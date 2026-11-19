@@ -293,7 +293,7 @@ export function SavingsCalculator() {
 
             {/* Annual Savings Number */}
             <div className="mt-6">
-              <div className="text-xs font-medium text-[#94A39B]">Projected Annual Verified Savings</div>
+              <div className="text-xs font-medium text-[#94A39B]">Projected Annual Savings</div>
               <div className="mt-1 text-3xl font-extrabold font-mono tracking-tight text-[#10B981] tabular-nums">
                 {formatINR(metrics.annualRupeesSaved)}
               </div>
