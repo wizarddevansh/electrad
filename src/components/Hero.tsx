@@ -42,7 +42,7 @@ export function Hero() {
             <strong className="text-[#10B981] font-medium">1-tap floor confirmation</strong> for Indian industries of all scales.
           </p>
 
-          {/* Three Key Architectural Pillars */}
+          {/* Four Key Architectural Pillars */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs font-medium text-[#94A39B] sm:text-sm">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-[#10B981]" />
@@ -50,7 +50,11 @@ export function Hero() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-[#10B981]" />
-              <span>BEE ADEETIE ≥10% Benchmark Alignment</span>
+              <span>Supports BEE ADEETIE ≥10% Savings (FY 2025–28)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-[#10B981]" />
+              <span>False-Alarm Suppression via 1-Tap Operator Confirmation</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-[#10B981]" />

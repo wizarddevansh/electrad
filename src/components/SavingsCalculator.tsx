@@ -44,7 +44,7 @@ const TARIFF_PRESETS: TariffPreset[] = [
 ];
 
 export function SavingsCalculator() {
-  const [monthlyBill, setMonthlyBill] = useState<number>(650000); // ₹6.5 Lakhs default
+  const [monthlyBill, setMonthlyBill] = useState<number>(150000); // ₹1.5 Lakhs default (consistent with LMV-6 <50 kW)
   const [selectedTariffId, setSelectedTariffId] = useState<string>("up-lmv6");
   const [customTariff, setCustomTariff] = useState<number>(8.5);
   const [savingsPercent, setSavingsPercent] = useState<number>(10); // 10% BEE ADEETIE default
@@ -138,8 +138,8 @@ export function SavingsCalculator() {
               {/* Quick bill preset chips */}
               <div className="mt-3 flex flex-wrap gap-2">
                 {[
-                  { label: "₹2.5 Lakhs", val: 250000 },
-                  { label: "₹6.5 Lakhs (Avg MSME)", val: 650000 },
+                  { label: "₹1.5 Lakhs (LMV-6)", val: 150000 },
+                  { label: "₹6.5 Lakhs (HV-2)", val: 650000 },
                   { label: "₹15 Lakhs", val: 1500000 },
                   { label: "₹35 Lakhs", val: 3500000 },
                 ].map((chip) => (
@@ -326,7 +326,7 @@ export function SavingsCalculator() {
                   {formatNumber(metrics.monthlyKwhSaved)} kWh / month
                 </div>
                 <div className="text-[10px] font-mono text-[#94A39B] mt-1">
-                  Bill (₹{formatINR(monthlyBill)}) ÷ ₹{effectiveTariff.toFixed(2)}/kWh × {savingsPercent}% target
+                  Bill ({formatINR(monthlyBill)}) ÷ ₹{effectiveTariff.toFixed(2)}/kWh × {savingsPercent}% target
                 </div>
               </div>
 
@@ -351,7 +351,7 @@ export function SavingsCalculator() {
                 <span>Simulation Disclaimer</span>
               </div>
               <p className="text-[11px]">
-                All calculations and figures shown are approximate and illustrative only. Actual factory energy use, savings, and CO₂ reductions vary based on equipment condition, duty cycles, power factor, and state DISCOM tariff structures.
+                All calculations and figures shown are approximate and illustrative only. Estimates treat the monthly bill as energy charges and exclude fixed and demand charges. Actual factory energy use, savings, and CO₂ reductions vary based on equipment condition, duty cycles, power factor, and state DISCOM tariff structures.
               </p>
             </div>
           </div>

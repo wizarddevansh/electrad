@@ -137,7 +137,7 @@ export default function DashboardPage() {
     setVerifiedCo2Kg((prev) => Number((prev + alert.potentialCo2Kg).toFixed(1)));
 
     setIsPulsingSavings(true);
-    setToastMessage(`✓ Confirmed waste on ${alert.feederName}: +₹${alert.potentialWasteRupees.toFixed(2)} added to verified audit ledger.`);
+    setToastMessage(`✓ Confirmed waste on ${alert.feederName}: +₹${alert.potentialWasteRupees.toFixed(2)} added to projected savings ledger.`);
 
     setTimeout(() => {
       setIsPulsingSavings(false);

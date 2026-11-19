@@ -110,7 +110,7 @@ export function FloorConfirmLoop({
             </span>
           </div>
           <p className="text-xs text-[#94A39B] mt-1">
-            Empower floor supervisors to classify idle draw in 1 tap. Confirmed waste immediately updates the audited savings ledger.
+            Empower floor supervisors to classify idle draw in 1 tap. Confirmed waste immediately updates the projected savings ledger.
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export function FloorConfirmLoop({
               All Floor Alerts Resolved
             </h4>
             <p className="mt-1 text-xs text-[#94A39B]">
-              Feeder loads are running within statistical baselines. Confirmed waste savings are booked into the ledger.
+              Feeder loads are running within statistical baselines. Confirmed waste savings are booked into the simulated ledger.
             </p>
           </div>
         ) : (

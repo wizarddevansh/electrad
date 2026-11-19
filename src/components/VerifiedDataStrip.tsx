@@ -18,7 +18,7 @@ export function VerifiedDataStrip() {
       metric: "60 → 160",
       subtitle: "Industrial Clusters Across 14 Sectors",
       description:
-        "BEE's ₹1,000 Cr ADEETIE initiative enforces ≥10% verified energy reductions across designated MSME industrial clusters nationwide.",
+        "BEE's ₹1,000 Cr ADEETIE initiative (FY 2025–28) supports Udyam MSMEs across 60 clusters in proving ≥10% project-level energy savings; Electrad helps plants track and pre-qualify savings.",
       sourceLabel: "PIB / Ministry of Power (ADEETIE)",
       sourceUrl: "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2144822",
     },

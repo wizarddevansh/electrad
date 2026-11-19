@@ -141,7 +141,7 @@ export function BusinessModel() {
         <div className="mt-10 rounded-lg border border-[#1C2E25] bg-[#101B16] p-4 text-xs text-[#94A39B] flex items-center justify-center gap-2 text-center">
           <Info className="h-4 w-4 text-[#10B981] shrink-0" />
           <span>
-            <strong>Why plants stay connected:</strong> Continuous compressor-drift alerts and BEE ADEETIE compliance reporting require active cloud telemetry.
+            <strong>Why plants stay connected:</strong> Continuous compressor-drift alerts and BEE ADEETIE tracking (supporting ≥10% project-level savings, FY 2025–28) require active cloud telemetry.
           </span>
         </div>
       </div>
